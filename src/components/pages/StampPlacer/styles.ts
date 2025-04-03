@@ -1,61 +1,50 @@
-.C {
-  position: relative;
+import styled from "styled-components";
 
+export const Wrapper = styled.div`
+  position: relative;
   display: flex;
   flex-direction: column;
   justify-content: space-between;
-}
+`;
 
-.C > div {
-  padding: 12px;
-}
-
-.C button {
-  padding: 8px 12px;
-  border-radius: 12px;
-
-  background-color: #5e5e5e;
-}
-
-.C .top {
+export const Top = styled.div`
   display: flex;
   flex-direction: column;
   align-items: center;
-
   overflow-x: hidden;
   overflow-y: auto;
-
   gap: 12px;
   flex: 1;
-
   width: 100%;
   height: 100%;
-}
+  padding: 12px;
+`;
 
-.C .top .image {
+export const PreviewContainer = styled.div`
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+`;
+
+export const ImageBox = styled.div`
   cursor: pointer;
-
   display: flex;
   flex: 0 0 auto;
   flex-direction: column;
-
   overflow: hidden;
-
   width: 160px;
   border-radius: 12px;
   background-color: aliceblue;
-}
 
-.C .top .image img {
-  width: 100%;
-  height: auto;
-}
+  img {
+    width: 100%;
+    height: auto;
+  }
+`;
 
-.C .top .imageIndex {
+export const ImageIndex = styled.div`
   display: flex;
   justify-content: center;
-
   padding: 4px 0;
-
   font-size: 12px;
-}
+`;

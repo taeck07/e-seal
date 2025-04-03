@@ -1,10 +1,10 @@
 import { useRef } from "react";
 import { useStore } from "@/stores/fileStore";
+import Stamp1 from "@/files/stamp-1.jpg";
+import { Bottom, PdfFile, PdfFileRemove, PdfUpload, Stamps, StampUploadBox, Top, Wrapper } from "./styles";
+import Button from "@/components/common/Button";
 
-import "./A.css";
-import Stamp1 from "../files/stamp-1.jpg";
-
-const A = () => {
+const StampUpload = () => {
   const { file, setFile } = useStore();
 
   const stampInputRef = useRef<HTMLInputElement>(null);
@@ -12,9 +12,7 @@ const A = () => {
 
   const handlePDFChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
-
     setFile(file!);
-
     e.target.value = "";
   };
 
@@ -33,40 +31,35 @@ const A = () => {
   const handleStampDraw = async () => { };
 
   return (
-    <div className="A">
-      <div className="top">
+    <Wrapper>
+      <Top>
         <div>
-          <div className="pdfUpload">
+          <PdfUpload>
             <input
               ref={pdfInputRef}
               type="file"
               onChange={handlePDFChange}
               style={{ display: "none" }}
             />
-
-            <button type="button" onClick={handlePDFUpload}>
+            <Button type="button" onClick={handlePDFUpload}>
               PDF 업로드
-            </button>
-          </div>
+            </Button>
+          </PdfUpload>
 
-          <div className="pdfFile">
+          <PdfFile>
             {!!file?.name && (
               <>
                 📄 파일명: <strong>{file?.name}</strong>
-                <button
-                  type="button"
-                  className="pdfFileRemove"
-                  onClick={handlePDFRemove}
-                >
+                <PdfFileRemove type="button" onClick={handlePDFRemove}>
                   X
-                </button>
+                </PdfFileRemove>
               </>
             )}
-          </div>
+          </PdfFile>
         </div>
 
         <div>
-          <div className="stampUpload">
+          <StampUploadBox>
             <input
               ref={stampInputRef}
               type="file"
@@ -74,24 +67,25 @@ const A = () => {
               onChange={() => { }}
               style={{ display: "none" }}
             />
-            <button type="button" onClick={handleStampUpload}>
+            <Button type="button" onClick={handleStampUpload}>
               도장 업로드
-            </button>
-          </div>
+            </Button>
+          </StampUploadBox>
 
-          <div className="stamps">
+          <Stamps>
             <img src={Stamp1} />
-          </div>
+          </Stamps>
         </div>
-      </div>
+      </Top>
 
-      <div className="bottom">
-        <button type="button" onClick={handleStampDraw}>
+      <Bottom>
+        <Button type="button" onClick={handleStampDraw}>
           도장 찍기
-        </button>
-      </div>
-    </div>
+        </Button>
+      </Bottom>
+    </Wrapper>
   );
 };
 
-export default A;
+
+export default StampUpload;

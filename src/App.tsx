@@ -1,6 +1,7 @@
-import A from "./components/A";
+
 import B from "./components/B";
 import C from "./components/C";
+import StampUpload from "@/components/pages/StampUpload";
 
 import GlobalStyle from "./styles/GlobalStyle";
 import styled from "styled-components";
@@ -49,7 +50,7 @@ function App() {
       <GlobalStyle />
       <AppLayout>
         <div>
-          <A />
+          <StampUpload />
           <B />
           <C />
         </div>

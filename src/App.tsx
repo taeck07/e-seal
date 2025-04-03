@@ -1,10 +1,10 @@
 
-import B from "./components/B";
 import C from "./components/C";
 import StampUpload from "@/components/pages/StampUpload";
 
 import GlobalStyle from "./styles/GlobalStyle";
 import styled from "styled-components";
+import PdfPreviewer from "./components/pages/PdfPreviewer";
 
 const AppLayout = styled.div`
   display: flex;
@@ -51,7 +51,7 @@ function App() {
       <AppLayout>
         <div>
           <StampUpload />
-          <B />
+          <PdfPreviewer />
           <C />
         </div>
       </AppLayout>

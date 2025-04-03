@@ -1,6 +1,6 @@
-import A from "./A";
-import B from "./B";
-import C from "./C";
+import A from "./components/A";
+import B from "./components/B";
+import C from "./components/C";
 
 import "./App.css";
 

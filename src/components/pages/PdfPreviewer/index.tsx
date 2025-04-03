@@ -1,19 +1,16 @@
 import { useEffect, useRef } from "react";
 import { useStore } from "@/stores/fileStore";
-
 import * as fabric from "fabric";
-
-import { getImageByFile } from "../utils/pdfUtils";
-import "./B.css";
+import { getImageByFile } from "@/utils/pdfUtils";
+import { CanvasContainer, DownloadButton, Wrapper } from "./styles";
 
 const FABRIC_CANVAS_WIDTH = 500;
 const FABRIC_CANVAS_HEIGHT = parseFloat(
   (FABRIC_CANVAS_WIDTH * Math.sqrt(2)).toFixed(2)
 );
 
-const B = () => {
+const PdfPreviewer = () => {
   const { file } = useStore();
-
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const fabricCanvasRef = useRef<fabric.Canvas | null>(null);
 
@@ -30,29 +27,24 @@ const B = () => {
 
     (async () => {
       const image = await getImageByFile(file);
-
       const img = await fabric.FabricImage.fromURL(image!);
 
-      img.set({
-        objectCaching: false,
-      });
-
+      img.set({ objectCaching: false });
       fabricCanvasRef.current!.backgroundImage = img;
       fabricCanvasRef.current?.requestRenderAll();
     })();
   }, [file]);
 
   return (
-    <div className="B">
-      <div>
+    <Wrapper>
+      <CanvasContainer>
         <canvas ref={canvasRef} />
-
-        <button type="button" onClick={handlePDFDownload}>
+        <DownloadButton type="button" onClick={handlePDFDownload}>
           PDF 다운로드
-        </button>
-      </div>
-    </div>
+        </DownloadButton>
+      </CanvasContainer>
+    </Wrapper>
   );
 };
 
-export default B;
+export default PdfPreviewer;

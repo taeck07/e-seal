@@ -1,8 +1,8 @@
 import { useEffect, useState } from "react";
-import { useStore } from "@/store";
+import { useStore } from "@/stores/fileStore";
 
 import "./C.css";
-import { getImageByFile } from "./utils";
+import { getImageByFile } from "../utils/pdfUtils";
 
 const C = () => {
   const { file } = useStore();

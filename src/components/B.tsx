@@ -1,9 +1,9 @@
 import { useEffect, useRef } from "react";
-import { useStore } from "@/store";
+import { useStore } from "@/stores/fileStore";
 
 import * as fabric from "fabric";
 
-import { getImageByFile } from "./utils";
+import { getImageByFile } from "../utils/pdfUtils";
 import "./B.css";
 
 const FABRIC_CANVAS_WIDTH = 500;
@@ -17,7 +17,7 @@ const B = () => {
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const fabricCanvasRef = useRef<fabric.Canvas | null>(null);
 
-  const handlePDFDownload = async () => {};
+  const handlePDFDownload = async () => { };
 
   useEffect(() => {
     if (!file || !canvasRef.current) return;

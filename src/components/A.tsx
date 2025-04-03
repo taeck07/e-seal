@@ -1,8 +1,8 @@
 import { useRef } from "react";
-import { useStore } from "@/store";
+import { useStore } from "@/stores/fileStore";
 
 import "./A.css";
-import Stamp1 from "./files/stamp-1.jpg";
+import Stamp1 from "../files/stamp-1.jpg";
 
 const A = () => {
   const { file, setFile } = useStore();
@@ -30,7 +30,7 @@ const A = () => {
     setFile(null);
   };
 
-  const handleStampDraw = async () => {};
+  const handleStampDraw = async () => { };
 
   return (
     <div className="A">
@@ -71,7 +71,7 @@ const A = () => {
               ref={stampInputRef}
               type="file"
               accept=".png"
-              onChange={() => {}}
+              onChange={() => { }}
               style={{ display: "none" }}
             />
             <button type="button" onClick={handleStampUpload}>

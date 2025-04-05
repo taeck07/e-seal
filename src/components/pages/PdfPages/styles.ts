@@ -26,7 +26,7 @@ export const PreviewContainer = styled.div`
   align-items: center;
 `;
 
-export const ImageBox = styled.div`
+export const ImageBox = styled.div<{selected: boolean}>`
   cursor: pointer;
   display: flex;
   flex: 0 0 auto;
@@ -35,16 +35,17 @@ export const ImageBox = styled.div`
   width: 160px;
   border-radius: 12px;
   background-color: aliceblue;
-
+  border: ${({ selected }) => (selected ? "3px solid #0070f3" : "none")};
   img {
     width: 100%;
     height: auto;
   }
 `;
 
-export const ImageIndex = styled.div`
+export const ImageIndex = styled.div<{selected: boolean}>`
   display: flex;
   justify-content: center;
   padding: 4px 0;
   font-size: 12px;
+  font-weight: ${({ selected }) => (selected && "bold")};
 `;

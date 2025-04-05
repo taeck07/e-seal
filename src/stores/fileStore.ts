@@ -1,8 +1,10 @@
 import { create } from "zustand";
 
 type Store = {
+  // selected pdf file
   file: File | null;
   setFile: (file: File | null) => void;
+  // selected pdf page on pdf previewer
   selectedPage: number | null;
   setSelectedPage: (page: number | null ) => void;
 };

@@ -9,7 +9,7 @@ const FABRIC_CANVAS_HEIGHT = parseFloat(
   (FABRIC_CANVAS_WIDTH * Math.sqrt(2)).toFixed(2)
 );
 
-
+// pdf upload, stamp upload, stamp to pdf
 const PdfPreviewer = () => {
   const { file, selectedPage } = useStore();
   const canvasRef = useRef<HTMLCanvasElement>(null);
@@ -19,8 +19,10 @@ const PdfPreviewer = () => {
   const handlePDFDownload = async () => { };
 
   useEffect(() => {
+    // for pdf file change
     fabricCanvasRef.current?.dispose();
     if (!file || !canvasRef.current) return;
+    // set canvas size
     fabricCanvasRef.current = new fabric.Canvas(canvasRef.current, {
       width: FABRIC_CANVAS_WIDTH,
       height: FABRIC_CANVAS_HEIGHT,
@@ -37,9 +39,11 @@ const PdfPreviewer = () => {
 
     (async () => {
       if (!images || selectedPage === null) return;
+      // view selected pdf page
       const img = await fabric.FabricImage.fromURL(images[selectedPage]);
       img.set({
         objectCaching: false,
+        // set filled image size to canvas size
         scaleX: FABRIC_CANVAS_WIDTH / img.width!,
         scaleY: FABRIC_CANVAS_HEIGHT / img.height!,
         left: 0,
@@ -65,3 +69,4 @@ const PdfPreviewer = () => {
 };
 
 export default PdfPreviewer;
+

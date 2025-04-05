@@ -1,3 +1,4 @@
+import { PDFDocument } from "pdf-lib";
 import * as pdfjsLib from "pdfjs-dist";
 import workerSrc from "pdfjs-dist/build/pdf.worker?url";
 
@@ -44,6 +45,40 @@ export const getImageByFile = async (
   file: File
 ): Promise<string[] | undefined> => {
   const result = await pdfFileToImages(file);
-
   return result.images;
+};
+
+
+
+export const applyStampToAllPages = async (
+  pdfFile: File,
+  stampImage: File
+): Promise<File | null> => {
+  if (!pdfFile || !stampImage) throw new Error("PDF 또는 도장 이미지가 없습니다.");
+  try {
+    const pdfBytes = await pdfFile.arrayBuffer();
+    const pdfDoc = await PDFDocument.load(pdfBytes);
+    const pages = pdfDoc.getPages();
+
+    const imageBytes = await stampImage.arrayBuffer();
+    const pngImage = await pdfDoc.embedPng(imageBytes);
+
+    for (const page of pages) {
+      const { width, height } = page.getSize();
+      // apply stamp position to bottom right
+      page.drawImage(pngImage, {
+        x: width - 100,
+        y: 50,
+        width: 80,
+        height: 80,
+      });
+    }
+
+    const stampedPdfBytes = await pdfDoc.save();
+    // from Uint8Array to File type
+    return new File([stampedPdfBytes], "stamped.pdf", { type: "application/pdf" });
+  } catch (error) {
+    alert("PDF에 도장을 적용하는 중 오류가 발생했습니다. 파일을 다시 확인해주세요.");
+    return null;
+  }
 };

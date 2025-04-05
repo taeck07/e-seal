@@ -31,6 +31,7 @@ const StampWorkspace = () => {
       return;
     }
 
+    // maximum allowed stamp count
     const combined = [...stampImages, ...pngs];
     if (combined.length > MAX_STAMP_IMAGES_COUNT) {
       alert(`도장은 최대 ${MAX_STAMP_IMAGES_COUNT}개까지만 업로드할 수 있습니다.`);
@@ -114,9 +115,9 @@ const StampWorkspace = () => {
           </PdfUpload>
 
           <PdfFile>
-            {!!file?.name && (
+            {!!file && (
               <>
-                📄 파일명: <strong>{file?.name}</strong>
+                📄 파일명: <strong>{file.name}</strong>
                 <PdfFileRemove type="button" onClick={handlePDFRemove}>
                   X
                 </PdfFileRemove>

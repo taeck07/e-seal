@@ -1,26 +1,17 @@
-import { useEffect, useState } from "react";
-import { useStore } from "@/stores/fileStore";
-import { getImageByFile } from "@/utils/pdfUtils";
 import { ImageBox, ImageIndex, PreviewContainer, Top, Wrapper } from "./styles";
 
-const PdfPages = () => {
-  const { file, selectedPage, setSelectedPage } = useStore();
-  const [fileImages, setFileImages] = useState<string[] | null>(null);
+type PropTypes = {
+  fileImages: string[] | null;
+  selectedPage?: number | null;
+  setSelectedPageNum?: (PdfPages: number) => void;
+}
+
+const PdfPages = ({ fileImages, selectedPage = null, setSelectedPageNum = () => { } }: PropTypes) => {
 
   const handlePageClick = (index: number) => {
-    setSelectedPage(index);
+    setSelectedPageNum(index);
   }
 
-  useEffect(() => {
-    if (!file) {
-      setFileImages([]);
-      return;
-    }
-
-    (async () => {
-      setFileImages((await getImageByFile(file)) ?? []);
-    })();
-  }, [file]);
 
   return (
     <Wrapper>

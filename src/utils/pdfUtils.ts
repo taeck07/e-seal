@@ -60,11 +60,15 @@ export const applyStampToAllPages = async (
     const pdfDoc = await PDFDocument.load(pdfBytes);
     const pages = pdfDoc.getPages();
 
-    const imageBytes = await stampImage.arrayBuffer();
-    const pngImage = await pdfDoc.embedPng(imageBytes);
+    if (stampImage.type !== "image/png") {
+      alert("지원하지 않는 도장 이미지 형식입니다. PNG 또는 JPG만 업로드해주세요.");
+      return null;
+    }
+    const stampImageBytes = await stampImage.arrayBuffer();
+    const pngImage = await pdfDoc.embedPng(stampImageBytes);
 
     for (const page of pages) {
-      const { width, height } = page.getSize();
+      const { width } = page.getSize();
       // apply stamp position to bottom right
       page.drawImage(pngImage, {
         x: width - 100,

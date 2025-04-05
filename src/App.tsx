@@ -1,10 +1,12 @@
+import { useEffect, useMemo, useState } from "react";
 
 import StampWorkspace from "@/components/pages/StampWorkspace";
 import PdfPreviewer from "./components/pages/PdfPreviewer";
-import StampPlacer from "./components/pages/PdfPages";
-
+import PdfPages from "./components/pages/PdfPages";
+import { useStore } from "@/stores/fileStore";
 import GlobalStyle from "./styles/GlobalStyle";
 import styled from "styled-components";
+import { getImageByFile } from "./utils/pdfUtils";
 
 const AppLayout = styled.div`
   display: flex;
@@ -45,6 +47,27 @@ const AppLayout = styled.div`
 `;
 
 function App() {
+  const { file } = useStore();
+  const [selectedPdfPageNum, setSelectedPdfPageNum] = useState<number | null>(null);
+  const [fileImages, setFileImages] = useState<string[] | null>(null);
+  const selectedImage = useMemo(() => {
+    if (selectedPdfPageNum === null || !fileImages) return null;
+    return fileImages[selectedPdfPageNum];
+  }, [selectedPdfPageNum, fileImages]);
+
+  useEffect(() => {
+    if (!file) {
+      setFileImages([]);
+      setSelectedPdfPageNum(null);
+      return;
+    }
+
+    (async () => {
+      setFileImages((await getImageByFile(file)) ?? []);
+      setSelectedPdfPageNum(0);
+    })();
+  }, [file]);
+
 
   return (
     <>
@@ -52,8 +75,8 @@ function App() {
       <AppLayout>
         <div>
           <StampWorkspace />
-          <PdfPreviewer />
-          <StampPlacer />
+          <PdfPreviewer selectedImage={selectedImage} />
+          <PdfPages fileImages={fileImages} setSelectedPageNum={setSelectedPdfPageNum} selectedPage={selectedPdfPageNum} />
         </div>
       </AppLayout>
     </>

@@ -62,8 +62,10 @@ const StampWorkspace = () => {
       alert("찍을 도장을 선택해주세요.");
       return;
     }
-    const stampedFile = await applyStampToAllPages(file, stampImages[selectedStamp]);
-    setFile(stampedFile);
+    const applyStampFile = await applyStampToAllPages(file, stampImages[selectedStamp]);
+    // when apply stamp failed
+    if (!applyStampFile) return;
+    setFile(applyStampFile);
   };
 
   const handleStampRemove = (e: React.MouseEvent<HTMLButtonElement>, stampIndex: number) => {

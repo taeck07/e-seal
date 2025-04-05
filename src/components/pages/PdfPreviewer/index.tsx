@@ -16,7 +16,23 @@ const PdfPreviewer = () => {
   const fabricCanvasRef = useRef<fabric.Canvas | null>(null);
   const [images, setImages] = useState<string[] | null>(null);
 
-  const handlePDFDownload = async () => { };
+  const handlePDFDownload = async () => {
+    try {
+
+      if (!file) return;
+      const url = URL.createObjectURL(file);
+      const a = document.createElement("a");
+      a.href = url;
+      a.download = `${file.name.replace(".pdf", "")}_stamp.pdf`;
+      a.click();
+      URL.revokeObjectURL(url);
+    } catch (error) {
+      alert("PDF 다운로드 중 오류가 발생했습니다.");
+      console.error(error);
+    }
+
+
+  };
 
   useEffect(() => {
     // for pdf file change

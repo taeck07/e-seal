@@ -1,7 +1,7 @@
 
-import StampUpload from "@/components/pages/StampUpload";
+import StampWorkspace from "@/components/pages/StampWorkspace";
 import PdfPreviewer from "./components/pages/PdfPreviewer";
-import StampPlacer from "./components/pages/StampPlacer";
+import StampPlacer from "./components/pages/PdfPages";
 
 import GlobalStyle from "./styles/GlobalStyle";
 import styled from "styled-components";
@@ -45,12 +45,13 @@ const AppLayout = styled.div`
 `;
 
 function App() {
+
   return (
     <>
       <GlobalStyle />
       <AppLayout>
         <div>
-          <StampUpload />
+          <StampWorkspace />
           <PdfPreviewer />
           <StampPlacer />
         </div>

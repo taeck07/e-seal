@@ -1,4 +1,4 @@
-import { useEffect, useRef } from "react";
+import { useEffect, useRef, useState } from "react";
 import { useStore } from "@/stores/fileStore";
 import * as fabric from "fabric";
 import { getImageByFile } from "@/utils/pdfUtils";
@@ -9,16 +9,18 @@ const FABRIC_CANVAS_HEIGHT = parseFloat(
   (FABRIC_CANVAS_WIDTH * Math.sqrt(2)).toFixed(2)
 );
 
+
 const PdfPreviewer = () => {
-  const { file } = useStore();
+  const { file, selectedPage } = useStore();
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const fabricCanvasRef = useRef<fabric.Canvas | null>(null);
+  const [images, setImages] = useState<string[] | null>(null);
 
   const handlePDFDownload = async () => { };
 
   useEffect(() => {
+    fabricCanvasRef.current?.dispose();
     if (!file || !canvasRef.current) return;
-
     fabricCanvasRef.current = new fabric.Canvas(canvasRef.current, {
       width: FABRIC_CANVAS_WIDTH,
       height: FABRIC_CANVAS_HEIGHT,
@@ -27,13 +29,28 @@ const PdfPreviewer = () => {
 
     (async () => {
       const image = await getImageByFile(file);
-      const img = await fabric.FabricImage.fromURL(image!);
-
-      img.set({ objectCaching: false });
-      fabricCanvasRef.current!.backgroundImage = img;
-      fabricCanvasRef.current?.requestRenderAll();
+      setImages(image || null);
     })();
   }, [file]);
+
+  useEffect(() => {
+
+    (async () => {
+      if (!images || selectedPage === null) return;
+      const img = await fabric.FabricImage.fromURL(images[selectedPage]);
+      img.set({
+        objectCaching: false,
+        scaleX: FABRIC_CANVAS_WIDTH / img.width!,
+        scaleY: FABRIC_CANVAS_HEIGHT / img.height!,
+        left: 0,
+        top: 0,
+        selectable: false,
+      });
+      fabricCanvasRef.current!.backgroundImage = img;
+      fabricCanvasRef.current?.requestRenderAll();
+
+    })();
+  }, [images, selectedPage]);
 
   return (
     <Wrapper>

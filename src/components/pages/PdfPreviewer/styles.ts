@@ -17,6 +17,7 @@ export const CanvasContainer = styled.div`
   canvas {
     width: 100%;
     height: 100%;
+    background-size: 100% 100%;
   }
 `;
 

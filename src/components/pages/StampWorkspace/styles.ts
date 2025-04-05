@@ -33,18 +33,31 @@ export const StampUploadBox = styled.div`
   min-height: 48px;
 `;
 
-export const Stamps = styled.div`
+export const StampWrap = styled.div`
   display: flex;
   gap: 8px;
   min-height: 54px;
-
+  flex-wrap: wrap;
+`;
+export const Stamp = styled.div<{selected: boolean}>`
+  width: 48px;
+  height: 48px;
+  position: relative;
   img {
+    width: 100%;
+    height: 100%;
     cursor: pointer;
-    width: 48px;
-    height: 48px;
     border-radius: 4px;
+    border: ${({ selected }) => (selected ? "3px solid #0070f3" : "none")};
+  }
+  button {
+    position: absolute;
+    color: black;
+    right: 2px;
+    top: 2px;
   }
 `;
+
 
 export const Bottom = styled.div`
   display: flex;

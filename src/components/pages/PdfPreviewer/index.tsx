@@ -1,7 +1,8 @@
 import { useEffect, useRef } from "react";
 import { useStore } from "@/stores/fileStore";
 import * as fabric from "fabric";
-import { CanvasContainer, DownloadButton, Wrapper } from "./styles";
+import { CanvasContainer, DownloadButton, SpinnerWrapper, Wrapper } from "./styles";
+import Spinner from "@/components/common/Spinner";
 
 const FABRIC_CANVAS_WIDTH = 500;
 const FABRIC_CANVAS_HEIGHT = parseFloat(
@@ -10,10 +11,11 @@ const FABRIC_CANVAS_HEIGHT = parseFloat(
 
 type PropTypes = {
   selectedImage: string | null;
+  isLoading: boolean;
 }
 
 // pdf upload, stamp upload, stamp to pdf
-const PdfPreviewer = ({ selectedImage }: PropTypes) => {
+const PdfPreviewer = ({ selectedImage, isLoading }: PropTypes) => {
   const { file } = useStore();
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const fabricCanvasRef = useRef<fabric.Canvas | null>(null);
@@ -37,26 +39,32 @@ const PdfPreviewer = ({ selectedImage }: PropTypes) => {
 
   useEffect(() => {
 
-    if (!file || !canvasRef.current) return;
+    if (!canvasRef.current) return;
     // set canvas size
     fabricCanvasRef.current = new fabric.Canvas(canvasRef.current, {
       width: FABRIC_CANVAS_WIDTH,
       height: FABRIC_CANVAS_HEIGHT,
       selection: false,
     });
-
-
     return () => {
       // unmount
       fabricCanvasRef.current?.dispose();
     }
-  }, [file]);
+  }, []);
 
   useEffect(() => {
 
     (async () => {
       try {
-        if (!selectedImage || !fabricCanvasRef.current) return;
+        if (!fabricCanvasRef.current) return;
+
+        if (!selectedImage) {
+          fabricCanvasRef.current!.backgroundImage = await fabric.FabricImage.fromURL("");
+          fabricCanvasRef.current?.requestRenderAll();
+          return;
+        }
+
+
         // view selected pdf page
         const img = await fabric.FabricImage.fromURL(selectedImage);
         img.set({
@@ -86,6 +94,8 @@ const PdfPreviewer = ({ selectedImage }: PropTypes) => {
           PDF 다운로드
         </DownloadButton>
       </CanvasContainer>
+      {isLoading && <SpinnerWrapper><Spinner /></SpinnerWrapper>}
+
     </Wrapper>
   );
 };

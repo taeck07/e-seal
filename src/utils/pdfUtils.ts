@@ -52,19 +52,24 @@ export const getImageByFile = async (
 
 export const applyStampToAllPages = async (
   pdfFile: File,
-  stampImage: File
+  stampImage: File,
+  stampSize: {width: number, height: number} = {width: 80, height: 80}
 ): Promise<File | null> => {
   if (!pdfFile || !stampImage) throw new Error("PDF 또는 도장 이미지가 없습니다.");
   try {
-    const pdfBytes = await pdfFile.arrayBuffer();
+
+    const [pdfBytes, stampImageBytes] = await Promise.all([
+      pdfFile.arrayBuffer(),
+      stampImage.arrayBuffer(),
+    ]);
+
     const pdfDoc = await PDFDocument.load(pdfBytes);
     const pages = pdfDoc.getPages();
 
     if (stampImage.type !== "image/png") {
-      alert("지원하지 않는 도장 이미지 형식입니다. PNG 또는 JPG만 업로드해주세요.");
-      return null;
+      throw new Error("지원하지 않는 도장 이미지 형식입니다. PNG 또는 JPG만 업로드해주세요.");
     }
-    const stampImageBytes = await stampImage.arrayBuffer();
+
     const pngImage = await pdfDoc.embedPng(stampImageBytes);
 
     for (const page of pages) {
@@ -73,16 +78,15 @@ export const applyStampToAllPages = async (
       page.drawImage(pngImage, {
         x: width - 100,
         y: 50,
-        width: 80,
-        height: 80,
+        width: stampSize.width,
+        height: stampSize.height,
       });
     }
 
     const stampedPdfBytes = await pdfDoc.save();
     // from Uint8Array to File type
-    return new File([stampedPdfBytes], "stamped.pdf", { type: "application/pdf" });
+    return new File([stampedPdfBytes], pdfFile.name, { type: "application/pdf" });
   } catch (error) {
-    alert("PDF에 도장을 적용하는 중 오류가 발생했습니다. 파일을 다시 확인해주세요.");
-    return null;
+    throw new Error("PDF에 도장을 적용하는 중 오류가 발생했습니다. 파일을 다시 확인해주세요.");
   }
 };

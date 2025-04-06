@@ -26,3 +26,10 @@ export const DownloadButton = styled(Button)`
   right: 12px;
   top: 12px;
 `;
+
+export const SpinnerWrapper = styled.div`
+  position: absolute;
+  width: 100%;
+  height: 100%;
+
+`;

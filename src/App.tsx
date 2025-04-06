@@ -50,6 +50,8 @@ function App() {
   const { file } = useStore();
   const [selectedPdfPageNum, setSelectedPdfPageNum] = useState<number | null>(null);
   const [fileImages, setFileImages] = useState<string[] | null>(null);
+  const [loadingFileToImage, setLoadingFileToImage] = useState(false);
+
   const selectedImage = useMemo(() => {
     if (selectedPdfPageNum === null || !fileImages) return null;
     return fileImages[selectedPdfPageNum];
@@ -63,8 +65,10 @@ function App() {
     }
 
     (async () => {
+      setLoadingFileToImage(() => true);
       setFileImages((await getImageByFile(file)) ?? []);
       setSelectedPdfPageNum(0);
+      setLoadingFileToImage(() => false);
     })();
   }, [file]);
 
@@ -75,8 +79,13 @@ function App() {
       <AppLayout>
         <div>
           <StampWorkspace />
-          <PdfPreviewer selectedImage={selectedImage} />
-          <PdfPages fileImages={fileImages} setSelectedPageNum={setSelectedPdfPageNum} selectedPage={selectedPdfPageNum} />
+          <PdfPreviewer selectedImage={selectedImage} isLoading={loadingFileToImage} />
+          <PdfPages
+            fileImages={fileImages}
+            setSelectedPageNum={setSelectedPdfPageNum}
+            selectedPage={selectedPdfPageNum}
+            isLoading={loadingFileToImage}
+          />
         </div>
       </AppLayout>
     </>
